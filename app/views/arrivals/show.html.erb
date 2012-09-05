@@ -1,0 +1,15 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Traveler name:</b>
+  <%= @arrival.traveler_name %>
+</p>
+
+<p>
+  <b>Time:</b>
+  <%= @arrival.time %>
+</p>
+
+
+<%= link_to 'Edit', edit_arrival_path(@arrival) %> |
+<%= link_to 'Back', arrivals_path %>
