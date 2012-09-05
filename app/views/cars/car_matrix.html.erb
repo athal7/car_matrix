@@ -1,17 +1,36 @@
-<% @cars_grouped.each do |date_object| %>
-  <% date_object.each do |date, cars| %>
+<div class="row">
+  <% @cars_grouped.each do |date_object| %>
+    <% date_object.each do |date, car_objects| %>
+  <div class="span6">
     <h2><%= date.strftime("%b %d %Y") %></h2>
-    <% cars.each do |car| %>
-      <% car.each do |car_name, flights| %>
-        <% flights.each do |flight| %>
-          <%= flight.traveler_name %>
-          <%= flight.airline %>
-          <%= flight.flight_number %>
-          <%= flight.flight_time.localtime.strftime("%l:%M%P") %>
-          <%= car_name %>
-          <br />
-        <% end %>
-      <% end %>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Traveler</th>
+          <th>Flight</th>
+          <% if car_objects.flat_map{|c| c.keys.first.flights.select{|fl| fl.flight_time.to_date == date}}.first.arrival %>
+            <th>Arrival Time</th>
+          <% else %>
+            <th>Departure Time</th>
+          <% end %>
+        </tr>
+      </thead>
+      <% car_objects.each do |car_object| %>
+        <% car_object.each do |car, flights| %>
+        <tr>
+        <td colspan="3"><div class="car-name"><%= car.name %></div></td>
+      </tr>
+      <% flights.each do |flight| %>
+        <tr>
+        <td><%= flight.traveler_name %></td>
+        <td><%= flight.airline %> <%= flight.flight_number %></td>
+        <td><%= flight.flight_time.localtime.strftime("%l:%M%P") %></td>
+      </tr>
     <% end %>
-  <% end %>
+    <% end %>
+    <% end %>
+    </table>
+  </div>
 <% end %>
+<% end %>
+</div>

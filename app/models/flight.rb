@@ -4,6 +4,11 @@ class Flight < ActiveRecord::Base
   after_create :place_in_car
 
   def place_in_car
-    Car.all.detect{|c| c.works_with?(self)}.flights << self
+    shuttle = Car.where(:shuttle => true).first
+    if shuttle.works_with?(self)
+      shuttle.flights << self
+    else
+      Car.all.detect{|c| c.works_with?(self)}.flights << self
+    end
   end
 end

@@ -1,37 +1,38 @@
-<%= form_for(@flight) do |f| %>
-  <% if @flight.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@flight.errors.count, "error") %> prohibited this flight from being saved:</h2>
-
-      <ul>
-      <% @flight.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
+<%= form_for @flight, :html => { :class => 'form-horizontal' } do |f| %>
+  <div class="control-group">
+    <%= f.label :traveler_name, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :traveler_name, :class => 'text_field' %>
     </div>
-  <% end %>
+  </div>
+  <div class="control-group">
+    <%= f.label :flight_number, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :flight_number, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :airline, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :airline, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :flight_time, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.datetime_select :flight_time, :class => 'datetime_select' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :arrival, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.check_box :arrival, :class => 'check_box' %>
+    </div>
+  </div>
 
-  <div class="field">
-    <%= f.label :traveler_name %><br />
-    <%= f.text_field :traveler_name %>
-  </div>
-  <div class="field">
-    <%= f.label :flight_number %><br />
-    <%= f.text_field :flight_number %>
-  </div>
-  <div class="field">
-    <%= f.label :airline %><br />
-    <%= f.text_field :airline %>
-  </div>
-  <div class="field">
-    <%= f.label :flight_time %><br />
-    <%= f.datetime_select :flight_time %>
-  </div>
-  <div class="field">
-    <%= f.label :arrival %><br />
-    <%= f.check_box :arrival %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
+  <div class="form-actions">
+    <%= f.submit nil, :class => 'btn btn-primary' %>
+    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                flights_path, :class => 'btn' %>
   </div>
 <% end %>
