@@ -1,8 +1,9 @@
-class CreateCars < ActiveRecord::Migration
+class InitialTables < ActiveRecord::Migration
   def change
     create_table :cars do |t|
       t.string :name
       t.integer :num_seats
+      t.boolean :shuttle, :default => false
 
       t.timestamps
     end

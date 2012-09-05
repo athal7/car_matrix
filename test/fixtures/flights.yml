@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  car_id: 1
+  traveler_name: MyString
+  flight_number: MyString
+  airline: MyString
+  flight_time: 2012-09-04 21:07:40
+  arrival: false
+
+two:
+  car_id: 1
+  traveler_name: MyString
+  flight_number: MyString
+  airline: MyString
+  flight_time: 2012-09-04 21:07:40
+  arrival: false

@@ -3,20 +3,21 @@
 <table>
   <tr>
     <th>Name</th>
-    <% @cars.reject{|c| c.name == "Hotel Shuttle"}.map(&:num_seats).max.times do |i| %>
-      <th>Passenger</th>
-    <% end %>
+    <th>Number of Seats</th>
+    <th>Shuttle?</th>
+    <th></th>
+    <th></th>
+    <th></th>
   </tr>
 
 <% @cars.each do |car| %>
   <tr>
     <td><%= car.name %></td>
-    <% car.arrivals.each do |arr| %>
-      <td><%= arr.traveler_name %>: <%= arr.time %></td>
-    <% end %>
-    <!-- <td><%= link_to 'Show', car %></td> -->
-    <!-- <td><%= link_to 'Edit', edit_car_path(car) %></td> -->
-    <!-- <td><%= link_to 'Destroy', car, method: :delete, data: { confirm: 'Are you sure?' } %></td> -->
+    <td><%= car.num_seats %></td>
+    <td><%= car.shuttle %></td>
+    <td><%= link_to 'Show', car %></td>
+    <td><%= link_to 'Edit', edit_car_path(car) %></td>
+    <td><%= link_to 'Destroy', car, method: :delete, data: { confirm: 'Are you sure?' } %></td>
   </tr>
 <% end %>
 </table>

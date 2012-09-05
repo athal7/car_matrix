@@ -1,9 +1,0 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
-
-one:
-  traveler_name: MyString
-  time: 2012-09-03 09:14:27
-
-two:
-  traveler_name: MyString
-  time: 2012-09-03 09:14:27

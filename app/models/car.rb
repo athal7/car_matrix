@@ -1,41 +1,48 @@
 class Car < ActiveRecord::Base
   attr_accessible :name, :num_seats, :shuttle
-  has_many :arrivals
-  has_many :departures
+  has_many :flights
 
-  def self.reorganize
-    Car.all.each do |car|
-      car.car_seats.each do |cs|
-        cs.destroy
+  def self.grouped_cars_with_flights
+    all_flight_dates = Car.all.flat_map(&:flight_dates).uniq
+    all_flight_dates.map do |date|
+      { date => Car.all.map do |c|
+        { c.name => c.flights}
       end
-    end
-    Arrival.all.each do |arr|
-      arr.place_in_car
-    end
-    Departure.all.each do |dep|
-      dep.place_in_car
+      }
     end
   end
 
-  def arrival_works_with?(time)
-    time = time.localtime.to_datetime
-    puts time.inspect
+  def self.reorganize
+    Flight.all.each do |fl|
+      fl.update_attribute(:car_id, nil)
+      fl.place_in_car
+    end
+  end
+
+  def works_with?(flight)
+    time = flight.flight_time.localtime.to_datetime
+    puts "****************"
+    puts flight.traveler_name
     puts time.hour.inspect
-    if name == 'Hotel Shuttle'
-      if (time.hour == 15 && time.minute >= 30) || time.hour > 15
+    puts shuttle.inspect
+    puts name
+    puts flight.arrival.inspect
+    if shuttle
+      if flight.arrival && ((time.hour == 15 && time.minute >= 30) || time.hour > 15)
         return true
       else
         return false
       end
     end
 
+    # FIXME FOR ACTIVERECORD TIME ISSUES
     date = time.to_date
-    date_arrivals = arrivals.select { |arr| arr.time.to_date == date }
-    return if date_arrivals.count >= num_seats
+    date_flights = flights.select { |fl| fl.flight_time.to_date == date }
+    return if date_flights.count >= num_seats
 
     within_time = true
-    date_arrivals.each do |arr|
-      if arr.time > time + 30.minutes || arr.time < time - 30.minutes
+    date_flights.each do |fl|
+      if fl.flight_time > time + 30.minutes || fl.flight_time < time - 30.minutes
         within_time = false
       end
     end
@@ -43,18 +50,8 @@ class Car < ActiveRecord::Base
 
   end
 
-  def departure_works_with?(time)
-    date = time.to_date
-    date_departures = departures.select { |arr| arr.time.to_date == date }
-    return if date_departures.count >= num_seats
-
-    within_time = true
-    date_departures.each do |arr|
-      if arr.time > time + 30.minutes || arr.time < time - 30.minutes
-        within_time = false
-      end
-    end
-    within_time
+  def flight_dates
+    flights.select{|fl| fl.flight_time.localtime.to_date > Date.today}.map{|fl| fl.flight_time.localtime.to_date}.uniq
 
   end
 end

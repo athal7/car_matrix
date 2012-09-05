@@ -1,0 +1,17 @@
+<% @cars_grouped.each do |date_object| %>
+  <% date_object.each do |date, cars| %>
+    <h2><%= date.strftime("%b %d %Y") %></h2>
+    <% cars.each do |car| %>
+      <% car.each do |car_name, flights| %>
+        <% flights.each do |flight| %>
+          <%= flight.traveler_name %>
+          <%= flight.airline %>
+          <%= flight.flight_number %>
+          <%= flight.flight_time.localtime.strftime("%l:%M%P") %>
+          <%= car_name %>
+          <br />
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

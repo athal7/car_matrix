@@ -38,36 +38,38 @@
 
     <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
-        <div class="container-fluid">
+        <div class="container">
           <a class="btn btn-navbar" data-target=".nav-collapse" data-toggle="collapse">
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="#">HuronCarMatrix</a>
-          <div class="container-fluid nav-collapse">
+          <%= link_to "HuronCarMatrix", root_url, :class => "brand" %>
+          <div class="container nav-collapse">
             <ul class="nav">
-              <li><%= link_to "Cars", "/cars"  %></li>
-              <li><%= link_to "Arrivals", "/arrivals"  %></li>
-              <li><%= link_to "Departures", "/departures"  %></li>
-              <li><%= link_to "New Arrival", "/arrivals/new"  %></li>
-              <li><%= link_to "New Departure", "/departures/new"  %></li>
+              <li><%= link_to "View Car Matrix", "/"  %></li>
+              <li><%= link_to "All Flights", "/flights"  %></li>
+              <li><%= link_to "All Cars", "/cars"  %></li>
+              <li><%= link_to "Submit New Flight", "/flights/new"  %></li>
+              <li><%= link_to "Reorganize", "/reorganize"  %></li>
             </ul>
           </div><!--/.nav-collapse -->
         </div>
       </div>
     </div>
 
-    <div class="container-fluid">
-      <div class="row-fluid">
-        <div class="span12">
-          <%= bootstrap_flash %>
-          <%= yield %>
-        </div>
-      </div><!--/row-->
+    <div class="container">
+      <div class="content">
+        <div class="row">
+           <div class="span12">
+             <%= flash[:notice] if flash[:notice] %>
+              <%= yield %>
+            </div>
+        </div><!--/row-->
+      </div><!--/content-->
 
       <footer>
-        <p>&copy; Andrew Thal 2012</p>
+        <p>&copy; Andrew Thal</p>
       </footer>
 
     </div> <!-- /container -->
