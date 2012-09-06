@@ -30,6 +30,7 @@ class FlightsController < ApplicationController
     @flight = Flight.find(params[:id])
 
     if @flight.update_attributes(params[:flight])
+      Car.reorganize
       redirect_to root_url, notice: 'Flight was successfully updated.'
     else
       render action: "edit"

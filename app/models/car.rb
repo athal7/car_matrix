@@ -1,6 +1,7 @@
 class Car < ActiveRecord::Base
   attr_accessible :name, :num_seats, :shuttle
   has_many :flights
+  after_save :reorganize
 
   def self.grouped_cars_with_flights
     all_flight_dates = Car.all.flat_map(&:flight_dates).uniq
@@ -47,5 +48,9 @@ class Car < ActiveRecord::Base
   def flight_dates
     flights.select{|fl| fl.flight_time.localtime.to_date > Date.today}.map{|fl| fl.flight_time.localtime.to_date}.uniq
 
+  end
+
+  def reorganize
+    Car.reorganize
   end
 end

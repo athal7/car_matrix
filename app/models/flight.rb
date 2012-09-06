@@ -11,4 +11,5 @@ class Flight < ActiveRecord::Base
       Car.all.detect{|c| c.works_with?(self)}.flights << self
     end
   end
+
 end
