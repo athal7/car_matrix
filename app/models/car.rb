@@ -14,9 +14,12 @@ class Car < ActiveRecord::Base
   end
 
   def self.reorganize
-    Flight.all.sort_by(&:flight_time).each do |fl|
+    flights = Flight.all.sort_by(&:flight_time)
+    shuttle = Car.where(:shuttle => true).first
+    flights.each do |fl|
       fl.update_attribute(:car_id, nil)
-      shuttle = Car.where(:shuttle => true).first
+    end
+    flights.each do |fl|
       if shuttle.works_with?(fl)
         shuttle.flights << fl
       else
