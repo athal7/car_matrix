@@ -21,7 +21,7 @@ class Car < ActiveRecord::Base
   end
 
   def works_with?(flight)
-    time = flight.flight_time.localtime.to_datetime
+    time = flight.flight_time.to_datetime
     if shuttle
       if flight.arrival && ((time.hour == 15 && time.minute >= 30) || time.hour > 15)
         return true
@@ -46,7 +46,7 @@ class Car < ActiveRecord::Base
   end
 
   def flight_dates
-    flights.select{|fl| fl.flight_time.localtime.to_date > Date.today}.map{|fl| fl.flight_time.localtime.to_date}.uniq
+    flights.select{|fl| fl.flight_time.to_date > Date.today}.map{|fl| fl.flight_time.to_date}.uniq
 
   end
 
