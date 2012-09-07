@@ -20,6 +20,7 @@ class FlightsController < ApplicationController
     @flight = Flight.new(params[:flight])
 
     if @flight.save
+      Car.reorganize
       redirect_to root_url, notice: 'Flight was successfully created.'
     else
       render action: "new"
