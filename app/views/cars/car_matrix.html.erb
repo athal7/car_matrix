@@ -24,7 +24,7 @@
         <tr>
         <td><%= flight.traveler_name %></td>
         <td><%= flight.airline %> <%= flight.flight_number %></td>
-        <td><%= flight.flight_time.localtime.strftime("%l:%M%P") %></td>
+        <td><%= flight.flight_time.strftime("%l:%M%P") %></td>
       </tr>
     <% end %>
     <% end %>
