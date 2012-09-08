@@ -5,7 +5,7 @@ class Car < ActiveRecord::Base
 
   def self.grouped_cars_with_flights
     all_flight_dates = Car.all.flat_map(&:flight_dates).uniq
-    all_flight_dates.flat_map do |date|
+    all_flight_dates.sort!.flat_map do |date|
       { date => Car.all.flat_map do |c|
         { c => c.flights.select {|fl| fl.flight_time.to_date == date }}
       end
