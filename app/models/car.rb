@@ -54,7 +54,7 @@ class Car < ActiveRecord::Base
   end
 
   def flight_dates
-    flights.select{|fl| fl.flight_time.to_date > Date.today}.map{|fl| fl.flight_time.to_date}.uniq
+    flights.select{|fl| fl.flight_time.to_date > Date.today - 1}.map{|fl| fl.flight_time.to_date}.uniq
 
   end
 
