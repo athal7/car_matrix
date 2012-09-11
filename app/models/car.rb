@@ -31,7 +31,7 @@ class Car < ActiveRecord::Base
   def works_with?(flight)
     time = flight.flight_time.to_datetime
     if shuttle
-      if flight.arrival && ((time.hour == 15 && time.minute >= 30) || time.hour > 15)
+      if flight.arrival && ((time.hour == 15 && time.minute >= 30) || time.hour > 15) && !(time.saturday? || time.sunday?)
         return true
       else
         return false
