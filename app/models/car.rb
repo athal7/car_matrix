@@ -4,7 +4,7 @@ class Car < ActiveRecord::Base
   after_save :reorganize
 
   def self.grouped_cars_with_flights
-    all_flight_dates = Car.all.flat_map(&:flight_dates).select{|d| d < Date.today + 5}.uniq
+    all_flight_dates = Car.all.flat_map(&:displayed_flight_dates).uniq
     all_flight_dates.sort!.flat_map do |date|
       { date => Car.all.flat_map do |c|
         { c => c.flights.select {|fl| fl.flight_time.to_date == date }}
@@ -29,33 +29,24 @@ class Car < ActiveRecord::Base
   end
 
   def works_with?(flight)
-    time = flight.flight_time.to_datetime
     if shuttle
-      if ((time.hour == 15 && time.minute >= 30) || time.hour > 15) && time.monday?
-        return true
-      else
-        return false
-      end
+      flight.eligible_for_shuttle? ? true : false
     else
-      # FIXME FOR ACTIVERECORD TIME ISSUES
-      date = time.to_date
-      date_flights = flights.select { |fl| fl.flight_time.to_date == date }
+      date_flights = flights.select { |fl| fl.flight_time.to_date == flight.flight_time.to_date }
       return if date_flights.count >= num_seats
 
-      within_time = true
       date_flights.each do |fl|
         if fl.flight_time > time + 30.minutes || fl.flight_time < time - 30.minutes
-          within_time = false
+          return false
         end
       end
-      within_time
+      true
     end
 
   end
 
-  def flight_dates
-    flights.select{|fl| fl.flight_time.to_date > Date.today - 1}.map{|fl| fl.flight_time.to_date}.uniq
-
+  def displayed_flight_dates
+    flights.select{|fl| fl.flight_time.to_date > Date.today - 1 && fl.flight_time.to_date < Date.today + 5}.map{|fl| fl.flight_time.to_date}.uniq
   end
 
   def reorganize
