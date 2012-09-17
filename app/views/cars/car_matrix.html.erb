@@ -9,8 +9,8 @@
         <tr>
           <th>Traveler</th>
           <th>Flight</th>
-          <% if car_objects.flat_map{|c| c.keys.first.flights.select{|fl| fl.flight_time.to_date == date}}.first.arrival %>
-            <th>Arrival Time</th>
+          <% if date.to_date.monday? || date.to_date.sunday? || date.to_date.tuesday? %>
+            <th>Departure Time</th>
           <% else %>
             <th>Departure Time</th>
           <% end %>

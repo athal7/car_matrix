@@ -27,9 +27,9 @@ ActiveRecord::Schema.define(:version => 20120905010740) do
     t.string   "flight_number"
     t.string   "airline"
     t.datetime "flight_time"
-    t.boolean  "arrival"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
+    t.boolean  "arrival",       :default => false
+    t.datetime "created_at",                       :null => false
+    t.datetime "updated_at",                       :null => false
   end
 
 end
