@@ -9,7 +9,6 @@
       <th><%= model_class.human_attribute_name(:flight_number) %></th>
       <th><%= model_class.human_attribute_name(:airline) %></th>
       <th><%= model_class.human_attribute_name(:flight_time) %></th>
-      <th><%= model_class.human_attribute_name(:arrival) %></th>
       <th><%=t '.actions', :default => t("helpers.actions") %></th>
     </tr>
   </thead>
@@ -20,7 +19,6 @@
         <td><%= flight.flight_number %></td>
         <td><%= flight.airline %></td>
         <td><%= flight.flight_time %></td>
-        <td><%= flight.arrival %></td>
         <td>
           <%= link_to t('.edit', :default => t("helpers.links.edit")),
                       edit_flight_path(flight), :class => 'btn btn-mini' %>
