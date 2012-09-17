@@ -18,9 +18,11 @@
       </thead>
       <% car_objects.each do |car_object| %>
         <% car_object.each do |car, flights| %>
-        <tr>
-        <td colspan="3"><div class="car-name"><%= car.name %></div></td>
-      </tr>
+          <% if date.to_date.monday? || date.to_date.thursday? %>
+            <tr>
+              <td colspan="3"><div class="car-name"><%= car.name %></div></td>
+            </tr>
+          <% end %>
       <% flights.each do |flight| %>
         <tr>
         <td><%= flight.traveler_name %></td>
