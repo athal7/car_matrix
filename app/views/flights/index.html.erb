@@ -18,7 +18,7 @@
         <td><%= flight.traveler_name %></td>
         <td><%= flight.flight_number %></td>
         <td><%= flight.airline %></td>
-        <td><%= flight.flight_time %></td>
+        <td><%= flight.flight_time.strftime("%b %d, %Y %l:%M %p") %></td>
         <td>
           <%= link_to t('.edit', :default => t("helpers.links.edit")),
                       edit_flight_path(flight), :class => 'btn btn-mini' %>
