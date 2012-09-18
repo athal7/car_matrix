@@ -7,7 +7,7 @@ class Car < ActiveRecord::Base
     all_flight_dates = Car.all.flat_map(&:displayed_flight_dates).uniq
     all_flight_dates.sort!.flat_map do |date|
       { date => Car.all.flat_map do |c|
-        { c => c.flights.select {|fl| fl.flight_time.to_date == date }}
+        { c => c.flights.sort_by(&:flight_time).select {|fl| fl.flight_time.to_date == date }}
       end
       }
     end
