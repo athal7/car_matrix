@@ -22,8 +22,10 @@ class Car < ActiveRecord::Base
     flights.each do |fl|
       if shuttle.works_with?(fl)
         shuttle.flights << fl
+      elsif car = Car.all.detect{|c| c.works_with?(fl)}
+        car.flights << fl
       else
-        Car.all.detect{|c| c.works_with?(fl)}.flights << fl
+        Car.last.flights << fl
       end
     end
   end
@@ -36,7 +38,7 @@ class Car < ActiveRecord::Base
       return if date_flights.count >= num_seats
 
       date_flights.each do |fl|
-        if fl.flight_time > time + 30.minutes || fl.flight_time < time - 30.minutes
+        if fl.flight_time > flight.flight_time + 30.minutes || fl.flight_time < flight.flight_time - 30.minutes
           return false
         end
       end
