@@ -2,34 +2,34 @@
   <h5><em>* note car groupings may change as more people submit their flight information</em></h5>
   <% @cars_grouped.each do |date_object| %>
     <% date_object.each do |date, car_objects| %>
-  <div class="span6">
-    <h2><%= date.strftime("%b %d %Y") %></h2>
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Traveler</th>
-          <th>Flight</th>
-          <th><%= flight_time_text(date) %></th>
-        </tr>
-      </thead>
-      <% car_objects.each do |car_object| %>
-        <% car_object.each do |car, flights| %>
-          <% if main_travel_date?(date)%>
+      <div class="span6">
+        <h2><%= date.strftime("%b %d %Y") %></h2>
+        <table class="table">
+          <thead>
             <tr>
-              <td colspan="3"><div class="car-name"><%= car.name %></div></td>
+              <th>Traveler</th>
+              <th>Flight</th>
+              <th><%= flight_time_text(date) %></th>
             </tr>
+          </thead>
+          <% car_objects.each do |car_object| %>
+            <% car_object.each do |car, flights| %>
+              <% if main_travel_date?(date)%>
+                <tr>
+                  <td colspan="3"><div class="car-name"><%= car.name %></div></td>
+                </tr>
+              <% end %>
+              <% flights.each do |flight| %>
+                <tr>
+                  <td><%= flight.traveler_name %></td>
+                  <td><%= flight.airline %> <%= flight.flight_number %></td>
+                  <td><%= flight.flight_time.strftime("%l:%M%P") %></td>
+                </tr>
+              <% end %>
+            <% end %>
           <% end %>
-      <% flights.each do |flight| %>
-        <tr>
-        <td><%= flight.traveler_name %></td>
-        <td><%= flight.airline %> <%= flight.flight_number %></td>
-        <td><%= flight.flight_time.strftime("%l:%M%P") %></td>
-      </tr>
+        </table>
+      </div>
     <% end %>
-    <% end %>
-    <% end %>
-    </table>
-  </div>
-<% end %>
-<% end %>
+  <% end %>
 </div>
