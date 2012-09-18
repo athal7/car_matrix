@@ -4,21 +4,55 @@ class Car < ActiveRecord::Base
   after_save :reorganize
 
   def self.grouped_cars_with_flights
-    all_flight_dates = Car.all.flat_map(&:displayed_flight_dates).uniq
-    all_flight_dates.sort!.flat_map do |date|
-      { date => Car.all.flat_map do |c|
-        { c => c.flights.sort_by(&:flight_time).select {|fl| fl.flight_time.to_date == date }}
-      end
-      }
+    displayed_flight_dates.map do |date|
+      { date => car_with_flights_for_date(date) }
     end
   end
 
   def self.reorganize
-    flights = Flight.all.sort_by(&:flight_time)
-    shuttle = Car.where(:shuttle => true).first
-    flights.each do |fl|
-      fl.update_attribute(:car_id, nil)
+    flights.each { |fl| fl.update_attribute(:car_id, nil) }
+    put_flights_in_car
+  end
+
+  def displayed_flight_dates
+    valid_flights = flights.select do |fl|
+      fl.flight_time.to_date > Date.today - 1 && fl.flight_time.to_date < Date.today + 5
     end
+    valid_flights.map { |fl| fl.flight_time.to_date }.uniq
+  end
+
+  def flights_for_date(date)
+    flights.select { |fl| fl.flight_time.to_date == date }.sort_by(&:flight_time)
+  end
+
+  def works_with?(flight)
+    if shuttle
+      flight.eligible_for_shuttle? ? true : false
+    else
+      date_flights = flights_for_date(flight.flight_time.to_date)
+      return if date_flights.count >= num_seats
+      date_flights.each { |fl| return if too_far_apart(fl, flight) }
+      true
+    end
+  end
+
+  def reorganize
+    Car.reorganize
+  end
+
+  private
+
+  def self.car_with_flights_for_date(date)
+    Car.all.map do |car|
+      { car => car.flights_for_date(date) }
+    end
+  end
+
+  def self.displayed_flight_dates
+    Car.all.flat_map(&:displayed_flight_dates).uniq.sort!
+  end
+
+  def self.put_flights_in_car
     flights.each do |fl|
       if shuttle.works_with?(fl)
         shuttle.flights << fl
@@ -30,28 +64,16 @@ class Car < ActiveRecord::Base
     end
   end
 
-  def works_with?(flight)
-    if shuttle
-      flight.eligible_for_shuttle? ? true : false
-    else
-      date_flights = flights.select { |fl| fl.flight_time.to_date == flight.flight_time.to_date }
-      return if date_flights.count >= num_seats
-
-      date_flights.each do |fl|
-        if fl.flight_time > flight.flight_time + 30.minutes || fl.flight_time < flight.flight_time - 30.minutes
-          return false
-        end
-      end
-      true
-    end
-
+  def self.flights
+    Flight.all.sort_by(&:flight_time)
   end
 
-  def displayed_flight_dates
-    flights.select{|fl| fl.flight_time.to_date > Date.today - 1 && fl.flight_time.to_date < Date.today + 5}.map{|fl| fl.flight_time.to_date}.uniq
+  def self.shuttle
+    Car.where(:shuttle => true).first
   end
 
-  def reorganize
-    Car.reorganize
+  def too_far_apart(flight1, flight2)
+    flight1.flight_time < flight2.flight_time - 30.minutes || flight1.flight_time > flight2.flight_time + 30.minutes
   end
+
 end

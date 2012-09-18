@@ -9,16 +9,12 @@
         <tr>
           <th>Traveler</th>
           <th>Flight</th>
-          <% if date.to_date.monday? || date.to_date.sunday? || date.to_date.tuesday? %>
-            <th>Departure Time</th>
-          <% else %>
-            <th>Departure Time</th>
-          <% end %>
+          <th><%= flight_time_text(date) %></th>
         </tr>
       </thead>
       <% car_objects.each do |car_object| %>
         <% car_object.each do |car, flights| %>
-          <% if date.to_date.monday? || date.to_date.thursday? %>
+          <% if main_travel_date?(date)%>
             <tr>
               <td colspan="3"><div class="car-name"><%= car.name %></div></td>
             </tr>
