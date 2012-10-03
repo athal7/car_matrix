@@ -2,6 +2,7 @@ class Car < ActiveRecord::Base
   attr_accessible :name, :num_seats, :shuttle
   has_many :flights
   after_save :reorganize
+  MAX_FLIGHT_DIFFERENCE=30
 
   def self.grouped_cars_with_flights
     displayed_flight_dates.map do |date|
@@ -26,14 +27,11 @@ class Car < ActiveRecord::Base
   end
 
   def works_with?(flight)
-    if shuttle
-      flight.eligible_for_shuttle? ? true : false
-    else
-      date_flights = flights_for_date(flight.flight_time.to_date)
-      return if date_flights.count >= num_seats
-      date_flights.each { |fl| return if too_far_apart(fl, flight) }
-      true
-    end
+    return flight.eligible_for_shuttle? if shuttle
+    date_flights = flights_for_date(flight.flight_time.to_date)
+    return false if date_flights.count >= num_seats
+    date_flights.each { |fl| return false unless close_enough(fl, flight) }
+    true
   end
 
   def reorganize
@@ -72,8 +70,8 @@ class Car < ActiveRecord::Base
     Car.where(:shuttle => true).first
   end
 
-  def too_far_apart(flight1, flight2)
-    flight1.flight_time < flight2.flight_time - 30.minutes || flight1.flight_time > flight2.flight_time + 30.minutes
+  def close_enough(flight1, flight2)
+    flight1.flight_time > flight2.flight_time - MAX_FLIGHT_DIFFERENCE.minutes && flight1.flight_time < flight2.flight_time + MAX_FLIGHT_DIFFERENCE.minutes
   end
 
 end
