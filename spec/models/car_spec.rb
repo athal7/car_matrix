@@ -1,6 +1,37 @@
 require 'spec_helper'
 
 describe Car do
+  describe "#displayed_flight_dates" do
+    it "returns the dates of the car's flights within a specified range" do
+      car = Car.new
+      flight = Flight.new({:flight_time => DateTime.now - 2.days})
+      flight_2 = Flight.new({:flight_time => DateTime.now})
+      flight_3 = Flight.new({:flight_time => DateTime.now + 4.days})
+      flight_4 = Flight.new({:flight_time => DateTime.now + 6.days})
+      car.flights << flight
+      car.flights << flight_2
+      car.flights << flight_3
+      car.flights << flight_4
+
+      car.displayed_flight_dates.should == [Date.today, Date.today + 4.days]
+
+    end
+  end
+
+  describe "#flights_for_date" do
+    it "returns the car's flights for a specific date" do
+      car = Car.new
+      flight = Flight.new({:flight_time => DateTime.now})
+      flight_2 = Flight.new({:flight_time => DateTime.now})
+      flight_3 = Flight.new({:flight_time => DateTime.now + 1.day})
+      car.flights << flight
+      car.flights << flight_2
+      car.flights << flight_3
+
+      car.flights_for_date(Date.today).should == [flight, flight_2]
+    end
+  end
+
   describe "#works_with?" do
     context "when the car is a shuttle" do
       let(:car) { Car.new({:shuttle => true, :num_seats => 5}) }
@@ -43,37 +74,6 @@ describe Car do
           end
         end
       end
-    end
-  end
-
-  describe "#flights_for_date" do
-    it "returns the car's flights for a specific date" do
-      car = Car.new
-      flight = Flight.new({:flight_time => DateTime.now})
-      flight_2 = Flight.new({:flight_time => DateTime.now})
-      flight_3 = Flight.new({:flight_time => DateTime.now + 1.day})
-      car.flights << flight
-      car.flights << flight_2
-      car.flights << flight_3
-
-      car.flights_for_date(Date.today).should == [flight, flight_2]
-    end
-  end
-
-  describe "#displayed_flight_dates" do
-    it "returns the dates of the car's flights within a specified range" do
-      car = Car.new
-      flight = Flight.new({:flight_time => DateTime.now - 2.days})
-      flight_2 = Flight.new({:flight_time => DateTime.now})
-      flight_3 = Flight.new({:flight_time => DateTime.now + 4.days})
-      flight_4 = Flight.new({:flight_time => DateTime.now + 6.days})
-      car.flights << flight
-      car.flights << flight_2
-      car.flights << flight_3
-      car.flights << flight_4
-
-      car.displayed_flight_dates.should == [Date.today, Date.today + 4.days]
-
     end
   end
 

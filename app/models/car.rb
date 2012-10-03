@@ -4,11 +4,10 @@ class Car < ActiveRecord::Base
   after_save :reorganize
   MAX_FLIGHT_DIFFERENCE=30
 
-  def self.grouped_cars_with_flights
-    displayed_flight_dates.map do |date|
-      { date => car_with_flights_for_date(date) }
-    end
+  def self.displayed_flight_dates
+    Car.all.flat_map(&:displayed_flight_dates).uniq.sort!
   end
+
 
   def self.reorganize
     flights.each { |fl| fl.update_attribute(:car_id, nil) }
@@ -39,16 +38,6 @@ class Car < ActiveRecord::Base
   end
 
   private
-
-  def self.car_with_flights_for_date(date)
-    Car.all.map do |car|
-      { car => car.flights_for_date(date) }
-    end
-  end
-
-  def self.displayed_flight_dates
-    Car.all.flat_map(&:displayed_flight_dates).uniq.sort!
-  end
 
   def self.put_flights_in_car
     flights.each do |fl|

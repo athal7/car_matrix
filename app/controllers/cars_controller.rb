@@ -48,6 +48,6 @@ class CarsController < ApplicationController
   end
 
   def car_matrix
-    @cars_grouped = Car.grouped_cars_with_flights
+    @flight_dates = Car.displayed_flight_dates
   end
 end
