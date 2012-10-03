@@ -3,6 +3,8 @@ class Car < ActiveRecord::Base
   has_many :flights
   after_save :reorganize
   MAX_FLIGHT_DIFFERENCE=30
+  FUTURE_DISPLAY_DATES=5
+  PAST_DISPLAY_DATES=1
 
   def self.displayed_flight_dates
     Car.all.flat_map(&:displayed_flight_dates).uniq.sort!
@@ -16,7 +18,7 @@ class Car < ActiveRecord::Base
 
   def displayed_flight_dates
     valid_flights = flights.select do |fl|
-      fl.flight_time.to_date > Date.today - 1 && fl.flight_time.to_date < Date.today + 5
+      fl.flight_time.to_date > Date.today - PAST_DISPLAY_DATES && fl.flight_time.to_date < Date.today + FUTURE_DISPLAY_DATES
     end
     valid_flights.map { |fl| fl.flight_time.to_date }.uniq
   end
