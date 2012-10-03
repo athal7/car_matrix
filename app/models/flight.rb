@@ -11,6 +11,6 @@ class Flight < ActiveRecord::Base
   end
 
   def eligible_for_shuttle?
-    flight_time.monday? && ((flight_time.hour == 15 && flight_time.min >= 30) || flight_time.hour > 15)
+    arrival? && ((flight_time.hour == 15 && flight_time.min >= 30) || flight_time.hour > 15)
   end
 end
