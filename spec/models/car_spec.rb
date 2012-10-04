@@ -1,6 +1,23 @@
 require 'spec_helper'
 
 describe Car do
+  describe ".displayed_flight_dates" do
+    it "returns a sorted, uniqed list of all of the displayed flight dates for all cars" do
+      car = Car.create
+      car2 = Car.create
+      flight = Flight.new({:flight_time => DateTime.now - 2.days})
+      flight_2 = Flight.new({:flight_time => DateTime.now})
+      flight_3 = Flight.new({:flight_time => DateTime.now})
+      flight_4 = Flight.new({:flight_time => DateTime.now + 4.days})
+      flight_5 = Flight.new({:flight_time => DateTime.now + 6.days})
+      car.flights << flight
+      car.flights << flight_2
+      car2.flights << flight_3
+      car2.flights << flight_4
+      car2.flights << flight_5
+      Car.displayed_flight_dates.should == [Date.today, Date.today + 4.days]
+    end
+  end
   describe "#displayed_flight_dates" do
     it "returns the dates of the car's flights within a specified range" do
       car = Car.new

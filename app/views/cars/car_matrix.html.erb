@@ -11,8 +11,8 @@
             <th><%= flight_time_text(date) %></th>
           </tr>
         </thead>
-        <% Car.all.reject {|car| car.flights_for_date(date).nil? }.each do |car| %>
-          <% if main_travel_date?(date)%>
+        <% @cars.each do |car| %>
+          <% if main_travel_date?(date) && (!car.shuttle || arrival_date?(date)) %>
             <tr>
               <td colspan="3"><div class="car-name"><%= car.name %></div></td>
             </tr>

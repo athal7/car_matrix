@@ -48,6 +48,7 @@ class CarsController < ApplicationController
   end
 
   def car_matrix
+    @cars = Car.includes(:flights)
     @flight_dates = Car.displayed_flight_dates
   end
 end

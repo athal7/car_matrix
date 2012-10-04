@@ -7,9 +7,8 @@ class Car < ActiveRecord::Base
   PAST_DISPLAY_DATES=1
 
   def self.displayed_flight_dates
-    Car.all.flat_map(&:displayed_flight_dates).uniq.sort!
+    Car.includes(:flights).flat_map(&:displayed_flight_dates).uniq.sort!
   end
-
 
   def self.reorganize
     flights.each { |fl| fl.update_attribute(:car_id, nil) }
@@ -42,14 +41,9 @@ class Car < ActiveRecord::Base
   private
 
   def self.put_flights_in_car
-    flights.each do |fl|
-      if shuttle.works_with?(fl)
-        shuttle.flights << fl
-      elsif car = Car.all.detect{|c| c.works_with?(fl)}
-        car.flights << fl
-      else
-        Car.last.flights << fl
-      end
+    flights.each do |flight|
+      car = Car.all.detect{|c| c.works_with?(flight)}
+      car ? car.flights << flight : Car.last.flights << flight
     end
   end
 
