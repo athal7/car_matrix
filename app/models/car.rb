@@ -48,7 +48,7 @@ class Car < ActiveRecord::Base
   end
 
   def self.flights
-    Flight.all.sort_by(&:flight_time)
+    Flight.new_enough_flights
   end
 
   def self.shuttle
