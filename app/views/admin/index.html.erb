@@ -1,3 +1,5 @@
-<%= link_to "Edit Flights", "/flights", :class => 'btn'  %>
-<%= link_to "Edit Cars", "/cars", :class => 'btn' %>
-<%= link_to "Reorganize", "/reorganize", :class => 'btn btn-info' %>
+<%= link_to "Reorganize", project_reorganize_path(@project), :class => 'btn btn-info' %>
+<%= link_to "Edit Flights", project_flights_path(@project), :class => 'btn'  %>
+<%= link_to "Edit Cars", project_cars_path(@project), :class => 'btn' %>
+<%= link_to "Edit Project", edit_project_path(@project), :class => 'btn btn' %>
+<%= link_to "Delete Project", project_path(@project), :method => :delete, :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) }, :class => 'btn btn-danger' %>

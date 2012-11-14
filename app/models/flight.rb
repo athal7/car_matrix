@@ -1,10 +1,7 @@
 class Flight < ActiveRecord::Base
-  attr_accessible :airline, :car_id, :flight_number, :flight_time, :traveler_name
+  attr_accessible :airline, :car_id, :flight_number, :flight_time, :traveler_name, :project_id
   belongs_to :car
-
-  def self.new_enough_flights
-    Flight.where("flight_time > ?", DateTime.now - 1.day).order('flight_time ASC')
-  end
+  belongs_to :project
 
   def arrival?
     flight_time.monday?

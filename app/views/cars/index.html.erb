@@ -19,9 +19,9 @@
         <td><%= car.shuttle %></td>
         <td>
           <%= link_to t('.edit', :default => t("helpers.links.edit")),
-                      edit_car_path(car), :class => 'btn btn-mini' %>
+                      edit_project_car_path(@project, car), :class => 'btn btn-mini' %>
           <%= link_to t('.destroy', :default => 'Delete'),
-                      car_path(car),
+                      project_car_path(@project, car),
                       :method => :delete,
                       :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
                       :class => 'btn btn-mini btn-danger' %>
@@ -32,5 +32,5 @@
 </table>
 
 <%= link_to t('.new', :default => t("helpers.links.new")),
-            new_car_path,
+            new_project_car_path(@project),
             :class => 'btn btn-primary' %>

@@ -1,11 +1,7 @@
 class FlightsController < ApplicationController
 
   def index
-    @flights = Flight.new_enough_flights
-  end
-
-  def show
-    @flight = Flight.find(params[:id])
+    @flights = @project.new_enough_flights
   end
 
   def new
@@ -18,10 +14,11 @@ class FlightsController < ApplicationController
 
   def create
     @flight = Flight.new(params[:flight])
+    @flight.project_id = params[:project_id]
 
     if @flight.save
-      Car.reorganize
-      redirect_to root_url, notice: 'Flight was successfully created.'
+      @project.reorganize
+      redirect_to project_flights_path(@project), notice: 'Flight was successfully created.'
     else
       render action: "new"
     end
@@ -31,8 +28,8 @@ class FlightsController < ApplicationController
     @flight = Flight.find(params[:id])
 
     if @flight.update_attributes(params[:flight])
-      Car.reorganize
-      redirect_to root_url, notice: 'Flight was successfully updated.'
+      @project.reorganize
+      redirect_to project_flights_path(@project), notice: 'Flight was successfully updated.'
     else
       render action: "edit"
     end
@@ -42,6 +39,6 @@ class FlightsController < ApplicationController
     @flight = Flight.find(params[:id])
     @flight.destroy
 
-    redirect_to flights_url
+    redirect_to project_flights_path(@project)
   end
 end

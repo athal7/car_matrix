@@ -1,26 +1,8 @@
 class Car < ActiveRecord::Base
-  attr_accessible :name, :num_seats, :shuttle
+  attr_accessible :name, :num_seats, :shuttle, :project_id
   has_many :flights
-  after_save :reorganize
-  MAX_FLIGHT_DIFFERENCE=30
-  FUTURE_DISPLAY_DATES=5
-  PAST_DISPLAY_DATES=1
+  belongs_to :project
 
-  def self.displayed_flight_dates
-    Car.includes(:flights).flat_map(&:displayed_flight_dates).uniq.sort!
-  end
-
-  def self.reorganize
-    flights.each { |fl| fl.update_attribute(:car_id, nil) }
-    put_flights_in_car
-  end
-
-  def displayed_flight_dates
-    valid_flights = flights.select do |fl|
-      fl.flight_time.to_date > Date.today - PAST_DISPLAY_DATES && fl.flight_time.to_date < Date.today + FUTURE_DISPLAY_DATES
-    end
-    valid_flights.map { |fl| fl.flight_time.to_date }.uniq
-  end
 
   def flights_for_date(date)
     flights.select { |fl| fl.flight_time.to_date == date }.sort_by(&:flight_time)
@@ -34,29 +16,10 @@ class Car < ActiveRecord::Base
     true
   end
 
-  def reorganize
-    Car.reorganize
-  end
-
   private
 
-  def self.put_flights_in_car
-    flights.each do |flight|
-      car = Car.all.detect{|c| c.works_with?(flight)}
-      car ? car.flights << flight : Car.last.flights << flight
-    end
-  end
-
-  def self.flights
-    Flight.new_enough_flights
-  end
-
-  def self.shuttle
-    Car.where(:shuttle => true).first
-  end
-
   def close_enough(flight1, flight2)
-    flight1.flight_time > flight2.flight_time - MAX_FLIGHT_DIFFERENCE.minutes && flight1.flight_time < flight2.flight_time + MAX_FLIGHT_DIFFERENCE.minutes
+    flight1.flight_time > flight2.flight_time - project.max_flight_difference.minutes && flight1.flight_time < flight2.flight_time + project.max_flight_difference.minutes
   end
 
 end

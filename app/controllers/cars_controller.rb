@@ -1,12 +1,6 @@
 class CarsController < ApplicationController
-  # GET /cars
-  # GET /cars.json
   def index
-    @cars = Car.all
-  end
-
-  def show
-    @car = Car.find(params[:id])
+    @cars = @project.cars
   end
 
   def new
@@ -19,9 +13,11 @@ class CarsController < ApplicationController
 
   def create
     @car = Car.new(params[:car])
+    @car.project_id = params[:project_id]
 
     if @car.save
-      redirect_to @car, notice: 'Car was successfully created.'
+      @project.reorganize
+      redirect_to project_cars_path(@project), notice: 'Car was successfully created.'
     else
       render action: "new"
     end
@@ -31,7 +27,8 @@ class CarsController < ApplicationController
     @car = Car.find(params[:id])
 
     if @car.update_attributes(params[:car])
-      redirect_to @car, notice: 'Car was successfully updated.'
+      @project.reorganize
+      redirect_to project_cars_path(@project), notice: 'Car was successfully updated.'
     else
       render action: "edit"
     end
@@ -40,15 +37,6 @@ class CarsController < ApplicationController
   def destroy
     @car = Car.find(params[:id])
     @car.destroy
-  end
-
-  def reorganize
-    Car.reorganize
-    redirect_to root_url, notice: 'Car Matrix was successfully reorganized!'
-  end
-
-  def car_matrix
-    @cars = Car.includes(:flights)
-    @flight_dates = Car.displayed_flight_dates
+    redirect_to project_cars_path(@project), notice: "Car was successfully deleted."
   end
 end

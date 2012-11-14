@@ -1,10 +1,10 @@
 HuronCarMatrix::Application.routes.draw do
-  resources :flights
+  resources :projects do
+    resources :flights, :except => [:show]
+    resources :cars, :except => [:show]
+    resources :admin, :only => [:index]
+    match "reorganize"  => "projects#reorganize"
+  end
 
-  resources :cars
-  resources :admin, :only => [:index]
-  match 'admin' => 'admin#index'
-  match 'reorganize' => 'cars#reorganize'
-  match 'car_matrix' => 'cars#car_matrix'
-  root :to => 'cars#car_matrix'
+  root :to => 'projects#index'
 end

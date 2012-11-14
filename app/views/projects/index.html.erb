@@ -1,0 +1,12 @@
+<%- model_class = Project -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => model_class.model_name.human.pluralize %></h1>
+</div>
+    <% @projects.each do |project| %>
+      <h4><%= link_to project.name, project_path(project) %></h4>
+    <% end %>
+
+    <br />
+<%= link_to t('.new', :default => t("helpers.links.new")),
+            new_project_path,
+            :class => 'btn btn-primary' %>
