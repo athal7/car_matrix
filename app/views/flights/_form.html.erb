@@ -24,6 +24,15 @@
     </div>
   </div>
 
+  <% if @new %>
+    <div class="control-group">
+      <%= label_tag :repeating, "How many weeks does this flight repeat?", :class => 'control-label' %>
+      <div class="controls">
+        <%= number_field_tag :repeating, :class => 'number_field' %>
+      </div>
+    </div>
+  <% end %>
+
   <div class="form-actions">
     <%= f.submit nil, :class => 'btn btn-primary' %>
     <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
