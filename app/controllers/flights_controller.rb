@@ -23,7 +23,9 @@ class FlightsController < ApplicationController
                             date_params["flight_time(2i)"].to_i,
                             date_params["flight_time(3i)"].to_i,
                             date_params["flight_time(4i)"].to_i,
-                            date_params["flight_time(5i)"].to_i)
+                            date_params["flight_time(5i)"].to_i,
+                            0,
+                            "-0500")
     new_flights = []
     num_weeks = params[:repeating].to_i > 0 ? params[:repeating].to_i : 1
     num_weeks.times do |i|
