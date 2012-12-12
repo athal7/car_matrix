@@ -13,6 +13,7 @@ class Car < ActiveRecord::Base
   def self.reorganize
     flights.each { |fl| fl.update_attribute(:car_id, nil) }
     put_flights_in_car
+    spread_out_flights
   end
 
   def displayed_flight_dates
@@ -45,6 +46,31 @@ class Car < ActiveRecord::Base
       car = Car.all.detect{|c| c.works_with?(flight)}
       car ? car.flights << flight : Car.last.flights << flight
     end
+  end
+
+  def self.spread_out_flights
+    Flight.flight_dates.each do |flight_date|
+      if (cars_for_date(flight_date).uniq.size < Car.all.size)
+        cars_with_no_flights_for_date(flight_date).each do |car|
+          if cars_with_multiple_flights_for_date(flight_date).present?
+            flight_to_update = Flight.flights_for_date(flight_date).detect{|fl| fl.car == cars_with_multiple_flights_for_date(flight_date).last}
+            flight_to_update.update_attribute(:car_id, car.id)
+          end
+        end
+      end
+    end
+  end
+
+  def self.cars_for_date(date)
+    Flight.flights_for_date(date).map(&:car)
+  end
+
+  def self.cars_with_no_flights_for_date(date)
+    (Car.all.to_a - cars_for_date(date).uniq).reject(&:shuttle)
+  end
+
+  def self.cars_with_multiple_flights_for_date(date)
+    cars_for_date(date).select{|car| cars_for_date(date).count(car) > 1}.uniq
   end
 
   def self.flights
