@@ -6,6 +6,10 @@ class Flight < ActiveRecord::Base
     Flight.where("flight_time > ?", DateTime.now - 1.day).order('flight_time ASC')
   end
 
+  def self.flight_dates
+    new_enough_flights.map {|fl| fl.flight_time.to_date}
+  end
+
   def arrival?
     flight_time.monday?
   end
