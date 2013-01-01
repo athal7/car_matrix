@@ -12,7 +12,7 @@
           </tr>
         </thead>
         <% @cars.each do |car| %>
-          <% if main_travel_date?(@cars, date) && !(car.shuttle && arrival_date?(date)) %>
+          <% if main_travel_date?(@cars, date) && !(car.shuttle && !arrival_date?(date)) %>
             <tr>
               <td colspan="3"><div class="car-name"><%= car.name %></div></td>
             </tr>
