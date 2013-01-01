@@ -15,7 +15,7 @@ class Flight < ActiveRecord::Base
   end
 
   def arrival?
-    flight_time.monday?
+    flight_time.monday? || flight_time.tuesday? || flight_time.wednesday?
   end
 
   def eligible_for_shuttle?
