@@ -41,7 +41,7 @@ class FlightsController < ApplicationController
     if new_flights.all?(&:valid?)
       new_flights.each(&:save)
       Car.reorganize
-      redirect_to root_url, notice: 'Flight was successfully created.'
+      redirect_to root_url, notice: 'Flight was successfully created. Refresh the page to see its car placement.'
     else
       render action: "new"
     end
@@ -52,7 +52,7 @@ class FlightsController < ApplicationController
 
     if @flight.update_attributes(params[:flight])
       Car.reorganize
-      redirect_to root_url, notice: 'Flight was successfully updated.'
+      redirect_to root_url, notice: 'Flight was successfully updated. Refresh the page to see its car placement.'
     else
       render action: "edit"
     end

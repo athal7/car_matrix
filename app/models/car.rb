@@ -11,9 +11,11 @@ class Car < ActiveRecord::Base
   end
 
   def self.reorganize
-    flights.each { |fl| fl.update_attribute(:car_id, nil) }
-    put_flights_in_car
-    spread_out_flights
+    Thread.new do
+      flights.each { |fl| fl.update_attribute(:car_id, nil) }
+      put_flights_in_car
+      spread_out_flights
+    end
   end
 
   def displayed_flight_dates

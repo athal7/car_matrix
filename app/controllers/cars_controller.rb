@@ -44,7 +44,7 @@ class CarsController < ApplicationController
 
   def reorganize
     Car.reorganize
-    redirect_to root_url, notice: 'Car Matrix was successfully reorganized!'
+    redirect_to root_url, notice: 'Car Matrix is reorganizing. Refresh the page to see the new placements.'
   end
 
   def car_matrix
