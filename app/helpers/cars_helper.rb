@@ -10,6 +10,7 @@ module CarsHelper
   end
 
   def arrival_date?(date)
-    date.to_date.monday? || date.to_date.sunday? || date.to_date.tuesday? || date.to_date.wednesday?
+    true
+    # date.to_date.monday? || date.to_date.sunday? || date.to_date.tuesday? || date.to_date.wednesday?
   end
 end
