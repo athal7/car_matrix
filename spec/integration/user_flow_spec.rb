@@ -13,7 +13,7 @@ describe "User Flow" do
       current_path.should == admin_path
     end
     it "is returned to it's current location when clicking the logo" do
-      click_link "HuronCarMatrix"
+      click_link "CarMatrix"
       current_path.should == root_path
     end
     it "is returned to it's current location when clicking the view car matrix link" do

@@ -1,4 +1,4 @@
-HuronCarMatrix::Application.routes.draw do
+CarMatrix::Application.routes.draw do
   resources :flights
 
   resources :cars
